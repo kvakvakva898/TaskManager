@@ -23,6 +23,8 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 add_executable (TaskManager
 	src/main.cpp
 
+	src/core/task_service.cpp
+
 	src/gui/main_window.h
 	src/gui/main_window.cpp)
 
