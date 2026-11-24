@@ -26,7 +26,9 @@ add_executable (TaskManager
 	src/core/task_service.cpp
 
 	src/gui/main_window.h
-	src/gui/main_window.cpp)
+	src/gui/main_window.cpp
+	src/gui/task_dialog
+	src/gui/task_dialog.cpp)
 
 target_include_directories(TaskManager
 	PRIVATE

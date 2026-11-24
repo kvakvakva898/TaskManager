@@ -1,4 +1,5 @@
 #include "main_window.h"
+#include "task_dialog.h"
 
 #include <QLabel>
 #include <QTableWidget>
@@ -57,6 +58,12 @@ void MainWindow::createToolBar()
 	auto* add_action = new QAction("Add task", this);
 
 	toolbar->addAction(add_action);
+
+	connect(
+		add_action,
+		&QAction::triggered,
+		this,
+		&MainWindow::createTask);
 }
 
 void MainWindow::createCentralWidget()
@@ -66,7 +73,7 @@ void MainWindow::createCentralWidget()
 	auto* central_widget = new QWidget(this);
 
 	// Главный layout располагает sidebar и таблицу горизонтально
-	auto* main_layout = new QHBoxLayout(central_widget);
+	auto* main_layout = new QHBoxLayout();
 
 	// Создаем разделитель, позволяющий менять размеры областей
 	auto* splitter = new QSplitter(Qt::Horizontal, central_widget);
@@ -107,12 +114,10 @@ void MainWindow::createCentralWidget()
 	search_edit_->setPlaceholderText("Search tasks...");
 
 	// Добавляем поиск над основным содержимым
-	auto* root_layout = new QVBoxLayout();
+	auto* root_layout = new QVBoxLayout(central_widget);
 
 	root_layout->addWidget(search_edit_);
 	root_layout->addLayout(main_layout);
-
-	central_widget->setLayout(root_layout);
 	
 	setCentralWidget(central_widget);
 }
@@ -121,4 +126,18 @@ void MainWindow::createStatusBar()
 {
 	// QMainWindow также прдоставляет готовую строку состояния
 	statusBar()->showMessage("Ready");
+}
+
+void MainWindow::createTask()
+{
+	TaskDialog dialog(nullptr, this);
+
+	// Открываем модальный диалог
+	if (dialog.exec() != QDialog::Accepted)
+	{
+		return;
+	}
+
+	// Получаем задачу из полей диалога
+	const Task task = dialog.getTask();
 }

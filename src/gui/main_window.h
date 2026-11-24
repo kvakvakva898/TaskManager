@@ -27,6 +27,9 @@ private:
 	// Создает строку состояния
 	void createStatusBar();
 
+private slots:
+	void createTask();
+
 private:
 	// Элументы интерфейса
 	QTableWidget* tasks_table_ = nullptr;
