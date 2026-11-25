@@ -25,10 +25,12 @@ add_executable (TaskManager
 
 	src/core/task_service.cpp
 
-	src/gui/main_window.h
+	include/gui/main_window.h
 	src/gui/main_window.cpp
-	src/gui/task_dialog
-	src/gui/task_dialog.cpp)
+	include/gui/task_dialog.h
+	src/gui/task_dialog.cpp
+	include/gui/task_table_model.h
+	src/gui/task_table_model.cpp)
 
 target_include_directories(TaskManager
 	PRIVATE

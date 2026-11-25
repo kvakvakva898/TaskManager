@@ -1,5 +1,6 @@
-#include "main_window.h"
-#include "task_dialog.h"
+#include "gui/main_window.h"
+#include "gui/task_dialog.h"
+#include "gui/task_table_model.h"
 
 #include <QLabel>
 #include <QTableWidget>
@@ -86,16 +87,25 @@ void MainWindow::createCentralWidget()
 	filters_list_->addItem("In progress");
 	filters_list_->addItem("Done");
 
+	task_model_ = new TaskTableModel(this);
+
 	// Правая область: таблица задач
-	tasks_table_ = new QTableWidget(splitter);
+	tasks_table_ = new QTableView(this);
 
-	// Временная структура из 3 колонок
-	tasks_table_->setColumnCount(3);
+	// Устанавливаем модель для отображения
+	tasks_table_->setModel(task_model_);
 
-	tasks_table_->setHorizontalHeaderLabels({
-		"Title",
-		"Status",
-		"Priority"});
+	// Запрещаем редактирование ячеек непосредственно в таблице
+	// ДЛя редактирования будем использовать TaskDialog
+	tasks_table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	
+	// Разрешаем выбирать целые строки
+	tasks_table_->setSelectionBehavior(
+		QAbstractItemView::SelectRows);
+
+	// Разрешаем выбирать только одну задачу
+	tasks_table_->setSelectionMode(
+		QAbstractItemView::SingleSelection);
 
 	// Разрешаем пользователю изменять ширину колонок
 	tasks_table_->horizontalHeader()->setStretchLastSection(true);

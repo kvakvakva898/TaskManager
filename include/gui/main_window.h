@@ -2,7 +2,8 @@
 
 #include <QMainWindow>
 
-class QTableWidget;
+class QTableView;
+class TaskTableModel;
 class QListWidget;
 class QLineEdit;
 class QPushbutton;
@@ -32,7 +33,8 @@ private slots:
 
 private:
 	// Элументы интерфейса
-	QTableWidget* tasks_table_ = nullptr;
+	QTableView* tasks_table_ = nullptr;
+	TaskTableModel* task_model_ = nullptr;
 	QListWidget* filters_list_ = nullptr;
 	QLineEdit* search_edit_ = nullptr;
 	QPushbutton* add_button_ = nullptr;

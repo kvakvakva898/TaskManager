@@ -1,4 +1,4 @@
-#include "task_dialog.h"
+#include "gui/task_dialog.h"
 
 #include <QLineEdit>
 #include <QTextEdit>

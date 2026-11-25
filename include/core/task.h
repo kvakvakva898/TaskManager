@@ -6,7 +6,7 @@
 // Статус задачи
 enum class TaskStatus
 {
-	toDo,
+	todo,
 	inProgress,
 	done
 };
@@ -16,7 +16,7 @@ enum class TaskPriority
 {
 	low,
 	medium,
-	hight
+	high
 };
 
 // Основная модель задачи
@@ -32,7 +32,7 @@ struct Task
 	std::string description;
 
 	// Текущий статус
-	TaskStatus status = TaskStatus::toDo;
+	TaskStatus status = TaskStatus::todo;
 
 	// Приоритет
 	TaskPriority priority = TaskPriority::medium;
