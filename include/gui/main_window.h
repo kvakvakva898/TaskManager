@@ -39,6 +39,11 @@ private slots:
 private:
 	// Обновляет содержимое таблицы
 	void refreshTasks();
+	void loadSettings();
+	void saveSettings();
+
+protected:
+	void closeEvent(QCloseEvent* event) override;
 
 private:
 	// Сервис не принадлежит MainWindow

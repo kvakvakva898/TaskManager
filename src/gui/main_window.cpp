@@ -18,6 +18,8 @@
 #include <QHeaderView>
 #include <QSortFilterProxyModel>
 #include <QMessageBox>
+#include <QSettings>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(
 	TaskService& task_service,
@@ -209,4 +211,42 @@ void MainWindow::refreshTasks()
 
 	// Передаем его модели
 	task_model_->setTasks(tasks);
+}
+
+void MainWindow::loadSettings()
+{
+	// QSettings автоматически определяет хранилище
+	// настроект по организации и названию приложения
+	QSettings settings(
+		"MyCompany",
+		"TaskManager");
+
+	// Восстанавливаем размер окна
+	resize(
+		settings.value("window/size", QSize(1000, 650)).toSize());
+
+	// Восстанавливаем положение окна
+	if (settings.contains("window/position"))
+	{
+		move(settings.value("window/position").toPoint());
+	}
+}
+
+void MainWindow::saveSettings()
+{
+	QSettings settings(
+		"MyCompany",
+		"TaskManager");
+	
+	settings.setValue("window/size", size());
+
+	settings.setValue("window/position", pos());
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	saveSettings();
+
+	// Передаем событие базовому классу
+	QMainWindow::closeEvent(event);
 }
