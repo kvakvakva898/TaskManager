@@ -7,6 +7,7 @@ class TaskTableModel;
 class QListWidget;
 class QLineEdit;
 class QPushbutton;
+class QSortFilterProxyModel;
 
 class MainWindow : public QMainWindow
 {
@@ -35,6 +36,7 @@ private:
 	// Элументы интерфейса
 	QTableView* tasks_table_ = nullptr;
 	TaskTableModel* task_model_ = nullptr;
+	QSortFilterProxyModel* proxy_model_ = nullptr;
 	QListWidget* filters_list_ = nullptr;
 	QLineEdit* search_edit_ = nullptr;
 	QPushbutton* add_button_ = nullptr;

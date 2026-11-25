@@ -16,6 +16,7 @@
 #include <QStatusBar>
 #include <QAction>
 #include <QHeaderView>
+#include <QSortFilterProxyModel>
 
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -109,6 +110,30 @@ void MainWindow::createCentralWidget()
 
 	// Разрешаем пользователю изменять ширину колонок
 	tasks_table_->horizontalHeader()->setStretchLastSection(true);
+
+	proxy_model_ = new QSortFilterProxyModel(this);
+
+	// Устанавливаем исходную модель
+	proxy_model_->setSourceModel(task_model_);
+
+	// Поиск будет выполнятся по всем колонкам
+	proxy_model_->setFilterKeyColumn(-1);
+
+	// По умолчанию поиск нечувствителен к регистру
+	proxy_model_->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+	// Подключаем proxy model к таблице
+	tasks_table_->setModel(proxy_model_);
+
+	// Разрешаем сортировку по заголовкам колонок
+	tasks_table_->setSortingEnabled(true);
+
+	// Подключаем поле поиск
+	connect(
+		search_edit_,
+		&QLineEdit::textChanged,
+		proxy_model_,
+		&QSortFilterProxyModel::setFilterFixedString);
 
 	// Добавляем обе области в splitter
 	splitter->addWidget(filters_list_);
