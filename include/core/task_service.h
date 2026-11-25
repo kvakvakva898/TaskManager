@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/task.h"
-#include "core/task_repository.h"
+#include "data/task_repository.h"
 
 #include <vector>
 #include <cstdint>

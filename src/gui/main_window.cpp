@@ -17,9 +17,13 @@
 #include <QAction>
 #include <QHeaderView>
 #include <QSortFilterProxyModel>
+#include <QMessageBox>
 
-MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow(parent)
+MainWindow::MainWindow(
+	TaskService& task_service,
+	QWidget* parent)
+	: task_service_(task_service),
+	  QMainWindow(parent)
 {
 	// Устанавливаем заголовок главного окна
 	setWindowTitle("Task Manager");
@@ -125,15 +129,10 @@ void MainWindow::createCentralWidget()
 	// Подключаем proxy model к таблице
 	tasks_table_->setModel(proxy_model_);
 
+	refreshTasks();
+
 	// Разрешаем сортировку по заголовкам колонок
 	tasks_table_->setSortingEnabled(true);
-
-	// Подключаем поле поиск
-	connect(
-		search_edit_,
-		&QLineEdit::textChanged,
-		proxy_model_,
-		&QSortFilterProxyModel::setFilterFixedString);
 
 	// Добавляем обе области в splitter
 	splitter->addWidget(filters_list_);
@@ -147,6 +146,13 @@ void MainWindow::createCentralWidget()
 	//Создаем строку поиска
 	search_edit_ = new QLineEdit(central_widget);
 	search_edit_->setPlaceholderText("Search tasks...");
+
+	// Подключаем поле поиск
+	connect(
+		search_edit_,
+		&QLineEdit::textChanged,
+		proxy_model_,
+		&QSortFilterProxyModel::setFilterFixedString);
 
 	// Добавляем поиск над основным содержимым
 	auto* root_layout = new QVBoxLayout(central_widget);
@@ -175,4 +181,32 @@ void MainWindow::createTask()
 
 	// Получаем задачу из полей диалога
 	const Task task = dialog.getTask();
+
+	try
+	{
+		// Передаем задачу сервису
+		task_service_.addTask(std::move(task));
+
+		// Обновляем отображение таблицы
+		refreshTasks();
+
+		// Показываем сообщение об успешном добавлении
+		statusBar()->showMessage("Task added successfully", 3000);
+	}
+	catch (const std::exception& e)
+	{
+		QMessageBox::critical(
+			this,
+			"Error",
+			QString::fromUtf8(e.what()));
+	}
+}
+
+void MainWindow::refreshTasks()
+{
+	// Получаем актуальный список задач из сервиса
+	const auto& tasks = task_service_.getTasks();
+
+	// Передаем его модели
+	task_model_->setTasks(tasks);
 }

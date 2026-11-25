@@ -2,6 +2,8 @@
 
 #include <QMainWindow>
 
+#include "core/task_service.h"
+
 class QTableView;
 class TaskTableModel;
 class QListWidget;
@@ -14,7 +16,9 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public: 
-	explicit MainWindow(QWidget* parent = nullptr);
+	explicit MainWindow(
+		TaskService& task_service,
+		QWidget* parent = nullptr);
 
 private:
 	// Создает центральную часть интерфейса
@@ -33,7 +37,15 @@ private slots:
 	void createTask();
 
 private:
-	// Элументы интерфейса
+	// Обновляет содержимое таблицы
+	void refreshTasks();
+
+private:
+	// Сервис не принадлежит MainWindow
+	// Его время жизни контролирутеся в main.cpp
+	TaskService& task_service_;
+
+	// Элементы интерфейса
 	QTableView* tasks_table_ = nullptr;
 	TaskTableModel* task_model_ = nullptr;
 	QSortFilterProxyModel* proxy_model_ = nullptr;
